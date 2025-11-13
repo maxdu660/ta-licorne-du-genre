@@ -121,6 +121,11 @@
       <div class="slider-diamond" id="slider-diamond-expression-fem"></div>
     </div>
 
+    <!-- Curseur Expression de genre : homme -->
+    <div class="slider-track" id="slider-expression-hom" style="background: linear-gradient(to right, #9BDFBA, #7BC4A8); top: 655px; left: 880px; width: 530px; height: 20px;">
+      <div class="slider-diamond" id="slider-diamond-expression-hom"></div>
+    </div>
+
     <!-- Cases à cocher : Sexe assigné à la naissance -->
     <div class="checkbox-group" style="top: 300px; left: 400px;">
       <label>
@@ -173,6 +178,7 @@
     setupSlider('slider-diamond-identity-aut', 'slider-identity-aut');
     
     setupSlider('slider-diamond-expression-fem', 'slider-expression-fem');
+    setupSlider('slider-diamond-expression-hom', 'slider-expression-hom');
 
     // Génère l'image
     document.getElementById('generer').addEventListener('click', function() {
@@ -186,6 +192,7 @@
   </script>
 </body>
 </html>
+
 
 
 
