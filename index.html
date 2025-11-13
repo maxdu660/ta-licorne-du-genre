@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ma licorne du genre</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    #container {
+      position: relative;
+      width: 800px;
+      height: auto;
+    }
+    #licorne-image {
+      width: 100%;
+      height: auto;
+    }
+    .slider-container {
+      position: absolute;
+      width: 300px;
+    }
+    /* Positionne chaque slider/case à cocher aux coordonnées voulues */
+    #slider-identite {
+      top: 100px;
+      left: 400px;
+    }
+    #checkbox-sexe {
+      top: 300px;
+      left: 400px;
+    }
+    .checkbox-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    #generer {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ma licorne du genre</h1>
+  <div id="container">
+    <img id="licorne-image" src="ta-licorne.png" alt="La licorne du genre">
+    <!-- Exemple pour l'identité de genre -->
+    <div class="slider-container" id="slider-identite">
+      <div id="slider-femme-homme"></div>
+    </div>
+    <!-- Exemple pour le sexe assigné à la naissance -->
+    <div class="slider-container" id="checkbox-sexe">
+      <div class="checkbox-group">
+        <input type="radio" name="sexe" value="femme" id="sexe-femme">
+        <label for="sexe-femme">Femme</label>
+        <input type="radio" name="sexe" value="homme" id="sexe-homme">
+        <label for="sexe-homme">Homme</label>
+        <input type="radio" name="sexe" value="intersexue" id="sexe-intersexue">
+        <label for="sexe-intersexue">Intersexué</label>
+      </div>
+    </div>
+  </div>
+  <button id="generer">Générer mon image</button>
+
+  <!-- Librairies JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script>
+    // Initialise les curseurs
+    const sliderFemmeHomme = document.getElementById('slider-femme-homme');
+    noUiSlider.create(sliderFemmeHomme, {
+      start: [50],
+      connect: 'lower',
+      range: {
+        'min': 0,
+        'max': 100
+      }
+    });
+
+    // Génère l'image
+    document.getElementById('generer').addEventListener('click', function() {
+      html2canvas(document.getElementById('container')).then(canvas => {
+        let link = document.createElement('a');
+        link.download = 'ma-licorne-du-genre.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    });
+  </script>
+</body>
+</html>
