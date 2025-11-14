@@ -9,12 +9,12 @@
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
+      overflow: hidden; /* Empêche le défilement */
     }
     .slider-diamond {
       user-select: none;
       -webkit-user-select: none;
     }
-
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -27,14 +27,16 @@
     }
     #container {
       position: relative;
-       width: 100%;
-       max-width: 800px;
-       margin: 0 auto;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      overflow: hidden; /* Empêche le défilement dans le conteneur */
     }
     #licorne-image {
       width: 100%;
       height: auto;
       display: block;
+      transition: transform 0.3s ease; /* Animation fluide pour le zoom */
     }
     /* Style des curseurs */
     .slider-track {
@@ -42,6 +44,7 @@
       border-radius: 7px;
       position: absolute;
       cursor: pointer;
+      pointer-events: auto; /* Permet les interactions */
     }
     .slider-diamond {
       width: 20px;
@@ -53,12 +56,14 @@
       top: -3px;
       left: 50%;
       cursor: pointer;
+      pointer-events: auto;
     }
     /* Style des cases à cocher */
     .checkbox-group {
       position: absolute;
       display: flex;
       gap: 237px;
+      pointer-events: auto;
     }
     .checkbox-group label {
       display: flex;
@@ -85,6 +90,7 @@
       border: 1px solid #ccc;
       border-radius: 3px;
       font-size: 30px !important;
+      pointer-events: auto;
     }
     #generer {
       margin: 20px;
@@ -102,47 +108,41 @@
   <h1>Ma licorne du genre</h1>
   <div id="container">
     <img id="licorne-image" src="./La_licorne_du_genre.jpg" alt="La licorne du genre">
-
+    <!-- Curseurs et autres éléments (inchangés) -->
     <!-- Curseur Identité de genre : femme -->
     <div class="slider-track" id="slider-identity-fem" style="background: linear-gradient(to right, #4ECDC4, #44A08D); top: 144px; left: 348px; width: 530px; height: 10px;">
       <div class="slider-diamond" id="slider-diamond-identity-fem"></div>
     </div>
-
     <!-- Curseur Identité de genre : homme -->
     <div class="slider-track" id="slider-identity-hom" style="background: linear-gradient(to right, #4ECDC4, #44A08D); top: 410px; left: 880px; width: 530px; height: 20px;">
       <div class="slider-diamond" id="slider-diamond-identity-hom"></div>
     </div>
-
-     <!-- Curseur Identité de genre : autre -->
+    <!-- Curseur Identité de genre : autre -->
     <div class="slider-track" id="slider-identity-aut" style="background: linear-gradient(to right, #4ECDC4, #44A08D); top: 456px; left: 880px; width: 530px; height: 20px;">
       <div class="slider-diamond" id="slider-diamond-identity-aut"></div>
     </div>
-    
+
     <!-- Curseur Expression de genre : femme -->
     <div class="slider-track" id="slider-expression-fem" style="background: linear-gradient(to right, #9BDFBA, #7BC4A8); top: 609px; left: 880px; width: 530px; height: 20px;">
       <div class="slider-diamond" id="slider-diamond-expression-fem"></div>
     </div>
-
     <!-- Curseur Expression de genre : homme -->
     <div class="slider-track" id="slider-expression-hom" style="background: linear-gradient(to right, #9BDFBA, #7BC4A8); top: 654px; left: 880px; width: 530px; height: 20px;">
       <div class="slider-diamond" id="slider-diamond-expression-hom"></div>
     </div>
-
-     <!-- Curseur Expression de genre : autre -->
+    <!-- Curseur Expression de genre : autre -->
     <div class="slider-track" id="slider-expression-aut" style="background: linear-gradient(to right, #9BDFBA, #7BC4A8); top: 701px; left: 880px; width: 530px; height: 20px;">
       <div class="slider-diamond" id="slider-diamond-expression-aut"></div>
     </div>
 
-     <!-- Curseur Attirance sexuelle : femme -->
+    <!-- Curseur Attirance sexuelle : femme -->
     <div class="slider-track" id="slider-attirance-fem" style="background: linear-gradient(to right, #FFB265, #A76F36); top: 1088px; left: 880px; width: 530px; height: 20px;">
       <div class="slider-diamond" id="slider-diamond-attirance-fem"></div>
     </div>
-
     <!-- Curseur Attirance sexuelle : homme -->
     <div class="slider-track" id="slider-attirance-hom" style="background: linear-gradient(to right, #FFB265, #A76F36); top: 1133px; left: 880px; width: 530px; height: 20px;">
       <div class="slider-diamond" id="slider-diamond-attirance-hom"></div>
     </div>
-
     <!-- Curseur Attirance sexuelle : autre -->
     <div class="slider-track" id="slider-attirance-aut" style="background: linear-gradient(to right, #FFB265, #A76F36); top: 1179px; left: 880px; width: 530px; height: 20px;">
       <div class="slider-diamond" id="slider-diamond-attirance-aut"></div>
@@ -152,12 +152,10 @@
     <div class="slider-track" id="slider-romance-fem" style="background: linear-gradient(to right, #BE414B, #86222A); top: 1338px; left: 880px; width: 530px; height: 20px;">
       <div class="slider-diamond" id="slider-diamond-romance-fem"></div>
     </div>
-
     <!-- Curseur Attirance romantique : homme -->
     <div class="slider-track" id="slider-romance-hom" style="background: linear-gradient(to right, #BE414B, #86222A); top: 1383px; left: 880px; width: 530px; height: 20px;">
       <div class="slider-diamond" id="slider-diamond-romance-hom"></div>
     </div>
-
     <!-- Curseur Attirance romantique : autre -->
     <div class="slider-track" id="slider-romance-aut" style="background: linear-gradient(to right, #BE414B, #86222A); top: 1429px; left: 880px; width: 530px; height: 20px;">
       <div class="slider-diamond" id="slider-diamond-romance-aut"></div>
@@ -176,18 +174,22 @@
       </label>
     </div>
 
-    <!-- Zone de texte : Prénom -->
+    <!-- Zones de texte -->
     <input type="text" class="text-input" placeholder="Prénom choisi" style="top: 240px; left: 1370px; width: 300px;">
-
-    <!-- Zone de texte : Pronoms -->
     <input type="text" class="text-input" placeholder="Pronoms" style="top: 288px; left: 1370px; width: 300px;">
   </div>
 
-  
   <button id="generer">Générer ma licorne</button>
 
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script>
+    // Désactive le zoom par molette sur la page
+    document.addEventListener('wheel', function(e) {
+      if (e.ctrlKey) {
+        e.preventDefault(); // Empêche le zoom par Ctrl+molette
+      }
+    }, { passive: false });
+
     // Fonction pour rendre les losanges glissants
     function setupSlider(diamondId, trackId) {
       const diamond = document.getElementById(diamondId);
@@ -196,6 +198,7 @@
 
       diamond.addEventListener('mousedown', (e) => {
         isDragging = true;
+        e.preventDefault();
       });
 
       document.addEventListener('mousemove', (e) => {
@@ -215,15 +218,12 @@
     setupSlider('slider-diamond-identity-fem', 'slider-identity-fem');
     setupSlider('slider-diamond-identity-hom', 'slider-identity-hom');
     setupSlider('slider-diamond-identity-aut', 'slider-identity-aut');
-    
     setupSlider('slider-diamond-expression-fem', 'slider-expression-fem');
     setupSlider('slider-diamond-expression-hom', 'slider-expression-hom');
     setupSlider('slider-diamond-expression-aut', 'slider-expression-aut');
-
     setupSlider('slider-diamond-attirance-fem', 'slider-attirance-fem');
     setupSlider('slider-diamond-attirance-hom', 'slider-attirance-hom');
     setupSlider('slider-diamond-attirance-aut', 'slider-attirance-aut');
-
     setupSlider('slider-diamond-romance-fem', 'slider-romance-fem');
     setupSlider('slider-diamond-romance-hom', 'slider-romance-hom');
     setupSlider('slider-diamond-romance-aut', 'slider-romance-aut');
@@ -240,135 +240,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
