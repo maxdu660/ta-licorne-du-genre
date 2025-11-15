@@ -102,12 +102,10 @@
   outline: none;
   pointer-events: auto;
   background-color: white;
-  overflow: hidden;
-  line-height: 1;
+  overflow: visible; /* Changement clé */
+  line-height: 12px;
   white-space: nowrap;
   box-sizing: border-box;
-  transform: scale(1); /* Force l'échelle à 1 */
-  transform-origin: left top;
 }
 
 
@@ -241,58 +239,55 @@
     }, { passive: false });
 
     // Fonction pour rendre les losanges glissants (compatible mobile)
-    function setupSlider(diamondId, trackId) {
-      const diamond = document.getElementById(diamondId);
-      const track = document.getElementById(trackId);
-      let isDragging = false;
-      let startX, startY;
+function setupSlider(diamondId, trackId) {
+  const diamond = document.getElementById(diamondId);
+  const track = document.getElementById(trackId);
+  let isDragging = false;
+  let startX = 0;
 
-      diamond.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        e.preventDefault();
-      });
+  // Pour ordinateur
+  diamond.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX;
+    e.preventDefault();
+    e.stopPropagation();
+  });
 
-      diamond.addEventListener('touchstart', (e) => {
-        isDragging = true;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-      });
+  // Pour mobile
+  diamond.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    e.preventDefault();
+    e.stopPropagation();
+  });
 
-      track.addEventListener('touchstart', (e) => {
-        isDragging = true;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-      });
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    handleDrag(e.clientX);
+  });
 
-      document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        handleDrag(e.clientX);
-      });
+  document.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    e.stopPropagation();
+    handleDrag(e.touches[0].clientX);
+  }, { passive: false });
 
-      document.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        // Empêche uniquement le défilement vertical si le mouvement est horizontal
-        if (Math.abs(e.touches[0].clientX - startX) > Math.abs(e.touches[0].clientY - startY)) {
-          e.preventDefault();
-          handleDrag(e.touches[0].clientX);
-        }
-      }, { passive: false });
+  function handleDrag(clientX) {
+    const rect = track.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    diamond.style.left = percentage + '%';
+  }
 
-      function handleDrag(clientX) {
-        const rect = track.getBoundingClientRect();
-        const x = clientX - rect.left;
-        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-        diamond.style.left = percentage + '%';
-      }
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
 
-      document.addEventListener('mouseup', () => {
-        isDragging = false;
-      });
-
-      document.addEventListener('touchend', () => {
-        isDragging = false;
-      });
-    }
+  document.addEventListener('touchend', () => {
+    isDragging = false;
+  });
+}
 
     // Active les losanges glissants
     setupSlider('slider-diamond-identity-fem', 'slider-identity-fem');
@@ -307,59 +302,65 @@
     setupSlider('slider-diamond-romance-fem', 'slider-romance-fem');
     setupSlider('slider-diamond-romance-hom', 'slider-romance-hom');
     setupSlider('slider-diamond-romance-aut', 'slider-romance-aut');
-
-    // Gestion des boutons radio personnalisés
-    document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
-      checkbox.addEventListener('click', function() {
-        document.querySelectorAll('.custom-checkbox').forEach(cb => {
-          cb.classList.remove('selected');
-        });
-        this.classList.add('selected');
-      });
+    
+// Gestion des boutons radio personnalisés
+document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
+  // Pour clic souris
+  checkbox.addEventListener('click', function(e) {
+    e.stopPropagation();
+    document.querySelectorAll('.custom-checkbox').forEach(cb => {
+      cb.classList.remove('selected');
     });
+    this.classList.add('selected');
+  });
+
+  // Pour tactile mobile
+  checkbox.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    document.querySelectorAll('.custom-checkbox').forEach(cb => {
+      cb.classList.remove('selected');
+    });
+    this.classList.add('selected');
+  });
+});
 
     // Génère l'image
 document.getElementById('generer').addEventListener('click', function(e) {
   e.preventDefault();
   this.style.visibility = 'hidden';
-  html2canvas(document.getElementById('container'), {
-  scale: 1, // On génère à l'échelle 1:1
-  logging: false,
-  useCORS: true,
-  allowTaint: true,
-  width: 800, // Largeur fixe correspondant à votre conteneur
-  height: 1200, // Hauteur estimée (ajustez si nécessaire)
-  windowWidth: 800,
-  windowHeight: 1200
-})
-    let link = document.createElement('a');
-    link.download = 'ma-licorne-du-genre.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-    this.style.visibility = 'visible';
-  });
-});
-   
-    
-    // Crée un lien pour télécharger l'image
-    let link = document.createElement('a');
-    link.download = 'ma-licorne-du-genre.png';
-    link.href = canvas.toDataURL('image/png');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
 
-    // Réaffiche le bouton
+  // Désactive temporairement le scale pour la capture
+  const container = document.getElementById('container');
+  const originalTransform = container.style.transform;
+  container.style.transform = 'none';
+
+  html2canvas(container, {
+    scale: 1,
+    logging: false,
+    useCORS: true,
+    allowTaint: true,
+    backgroundColor: '#f9f9f9'
+  }).then(canvas => {
+    let link = document.createElement('a');
+    link.download = 'ma-licorne-du-genre.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+
+    // Restaure le transform original
+    container.style.transform = originalTransform;
     this.style.visibility = 'visible';
   }).catch(error => {
-    console.error('Erreur lors de la génération de l\'image:', error);
+    console.error('Erreur:', error);
+    container.style.transform = originalTransform;
     this.style.visibility = 'visible';
-    alert('Une erreur est survenue lors de la génération de l\'image. Veuillez réessayer.');
+    alert('Erreur lors de la génération');
   });
+});
 });
   </script>
 </body>
 </html>
+
 
 
 
