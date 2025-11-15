@@ -91,7 +91,7 @@
       background-color: black;
     }
     /* Style des zones de texte */
-  .editable-text {
+ .editable-text {
   position: absolute;
   padding: 2px;
   border: 1px solid #ccc;
@@ -103,9 +103,11 @@
   pointer-events: auto;
   background-color: white;
   overflow: hidden;
-  line-height: 12px;
+  line-height: 1;
   white-space: nowrap;
   box-sizing: border-box;
+  transform: scale(1); /* Force l'échelle à 1 */
+  transform-origin: left top;
 }
 
 
@@ -143,23 +145,13 @@
 }
 }
 
-    /* Optimisation pour html2canvas sur mobile */
-@media (max-width: 800px) {
-  #container {
-    transform: none !important;
-  }
-  .slider-track, .slider-diamond, .editable-text, .custom-checkbox {
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-  }
-}
     
   </style>
 </head>
 <body>
   <div id="mobile-container">
   <h1>Ma licorne du genre</h1>
-  <div id="container" style="contain: paint; will-change: transform;">
+  <div id="container">
 
       <img id="licorne-image" src="./La_licorne_du_genre.jpg" alt="La licorne du genre">
       <!-- Curseurs et autres éléments -->
@@ -329,27 +321,26 @@
     // Génère l'image
 document.getElementById('generer').addEventListener('click', function(e) {
   e.preventDefault();
-
-  // Masque le bouton pendant la capture
   this.style.visibility = 'hidden';
-
-  // Options optimisées pour mobile
   html2canvas(document.getElementById('container'), {
-    scale: 1, // Réduit le scale pour éviter les problèmes de mémoire sur mobile
-    logging: true, // Active les logs pour le débogage
-    useCORS: true,
-    allowTaint: true,
-    letterRendering: true,
-    backgroundColor: '#f9f9f9',
-    scrollX: 0,
-    scrollY: 0,
-    windowWidth: document.getElementById('container').scrollWidth,
-    windowHeight: document.getElementById('container').scrollHeight,
-    onclone: function(clonedDoc) {
-      // Corrige les éléments clonés pour le rendu
-      clonedDoc.getElementById('container').style.transform = 'none';
-    }
-  }).then(canvas => {
+  scale: 1, // On génère à l'échelle 1:1
+  logging: false,
+  useCORS: true,
+  allowTaint: true,
+  width: 800, // Largeur fixe correspondant à votre conteneur
+  height: 1200, // Hauteur estimée (ajustez si nécessaire)
+  windowWidth: 800,
+  windowHeight: 1200
+})
+    let link = document.createElement('a');
+    link.download = 'ma-licorne-du-genre.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    this.style.visibility = 'visible';
+  });
+});
+   
+    
     // Crée un lien pour télécharger l'image
     let link = document.createElement('a');
     link.download = 'ma-licorne-du-genre.png';
@@ -369,6 +360,7 @@ document.getElementById('generer').addEventListener('click', function(e) {
   </script>
 </body>
 </html>
+
 
 
 
