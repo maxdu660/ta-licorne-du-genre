@@ -84,14 +84,23 @@
       background-color: #333;
     }
     /* Style des zones de texte */
-    .text-input {
-      position: absolute;
-      padding: 5px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      font-size: 12px !important;
-      pointer-events: auto;
-    }
+    .editable-text {
+  position: absolute;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 12px;
+  min-height: 20px;
+  outline: none;
+  pointer-events: auto;
+  background-color: white;
+  overflow: hidden;
+}
+.editable-text:empty::before {
+  content: attr(placeholder);
+  color: #999;
+}
+    
     #generer {
       margin: 20px;
       padding: 10px 20px;
@@ -175,8 +184,8 @@
     </div>
 
     <!-- Zones de texte -->
-    <input type="text" class="text-input" placeholder="Prénom choisi" style="top: 112px; left: 555px; width: 100px;">
-    <input type="text" class="text-input" placeholder="Pronoms" style="top: 288px; left: 1370px; width: 100px;">
+<div class="editable-text" contenteditable="true" style="top: 112px; left: 555px; width: 100px;" placeholder="Prénom choisi"></div>
+<div class="editable-text" contenteditable="true" style="top: 288px; left: 555px; width: 100px;" placeholder="Pronoms"></div>
   </div>
   
  <!-- Bouton generer l'image -->
@@ -256,6 +265,7 @@
   </script>
 </body>
 </html>
+
 
 
 
