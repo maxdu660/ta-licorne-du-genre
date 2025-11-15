@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Ma licorne du genre</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <style>
     /* Désactive la sélection de texte */
     body, html {
@@ -98,15 +99,19 @@
 }
     
     #generer {
-      margin: 20px;
-      padding: 10px 20px;
-      font-size: 12px;
-      cursor: pointer;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
+      margin: 20px auto; /* Centré */
+  padding: 15px 30px; /* Plus grand pour le tactile */
+  font-size: 16px; /* Texte plus lisible */
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  width: 80%; /* Largeur adaptée à l'écran */
+  max-width: 300px; /* Largeur maximale */
+  text-align: center;
+  display: block; /* Pour le centrage */
+}
 
   </style>
 
@@ -203,29 +208,49 @@
       }
     }, { passive: false });
 
-    // Fonction pour rendre les losanges glissants
-    function setupSlider(diamondId, trackId) {
-      const diamond = document.getElementById(diamondId);
-      const track = document.getElementById(trackId);
-      let isDragging = false;
+    // Fonction pour rendre les losanges glissants (compatible mobile)
+function setupSlider(diamondId, trackId) {
+  const diamond = document.getElementById(diamondId);
+  const track = document.getElementById(trackId);
+  let isDragging = false;
 
-      diamond.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        e.preventDefault();
-      });
+  // Événements pour ordinateur
+  diamond.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    e.preventDefault();
+  });
 
-      document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const rect = track.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-        diamond.style.left = percentage + '%';
-      });
+  // Événements pour mobile
+  diamond.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    e.preventDefault();
+  });
 
-      document.addEventListener('mouseup', () => {
-        isDragging = false;
-      });
-    }
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    handleDrag(e.clientX);
+  });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    handleDrag(e.touches[0].clientX);
+  });
+
+  function handleDrag(clientX) {
+    const rect = track.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    diamond.style.left = percentage + '%';
+  }
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  document.addEventListener('touchend', () => {
+    isDragging = false;
+  });
+}
 
     // Active les losanges glissants
     setupSlider('slider-diamond-identity-fem', 'slider-identity-fem');
@@ -265,6 +290,7 @@ document.getElementById('generer').addEventListener('click', function() {
   </script>
 </body>
 </html>
+
 
 
 
