@@ -10,7 +10,9 @@
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
-      overflow: hidden; /* Empêche le défilement */
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
     }
     .slider-diamond {
       user-select: none;
@@ -19,25 +21,32 @@
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 10px;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
       background-color: #f9f9f9;
+      min-height: 100vh;
     }
-    #container {
-      position: relative;
+    #mobile-container {
       width: 100%;
       max-width: 800px;
       margin: 0 auto;
-      overflow: hidden; /* Empêche le défilement dans le conteneur */
+      overflow: hidden;
+      position: relative;
+    }
+    #container {
+      position: relative;
+      width: 800px;
+      margin: 0 auto;
+      overflow: hidden;
+      transform-origin: top center;
     }
     #licorne-image {
       width: 100%;
       height: auto;
       display: block;
-      transition: transform 0.3s ease; /* Animation fluide pour le zoom */
     }
     /* Style des curseurs */
     .slider-track {
@@ -45,7 +54,7 @@
       border-radius: 7px;
       position: absolute;
       cursor: pointer;
-      pointer-events: auto; /* Permet les interactions */
+      pointer-events: auto;
     }
     .slider-diamond {
       width: 8px;
@@ -59,225 +68,194 @@
       cursor: pointer;
       pointer-events: auto;
     }
-    
     /* Style des cases à cocher */
     .custom-checkbox-group {
-  position: absolute;
-  display: flex;
-  gap: 96px; /* Espace entre les boutons */
-}
-
-.custom-checkbox {
-  width: 20px; /* Largeur du bouton */
-  height: 20px; /* Hauteur du bouton */
-  border-radius: 50%; /* Forme ronde */
-  background-color: transparent; /* Fond transparent */
-  cursor: pointer; /* Curseur "main" au survol */
-  border: none; /* Pas de bordure */
-}
-
-.custom-checkbox.selected {
-  background-color: black; /* Fond noir quand sélectionné */
-}
-    
+      position: absolute;
+      display: flex;
+      gap: 96px;
+    }
+    .custom-checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: transparent;
+      cursor: pointer;
+      border: none;
+    }
+    .custom-checkbox.selected {
+      background-color: black;
+    }
     /* Style des zones de texte */
     .editable-text {
-  position: absolute;
-  padding: 2px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  font-size: 12px;
-  min-height: 10px;
-  outline: none;
-  pointer-events: auto;
-  background-color: white;
-  overflow: hidden;
-}
-.editable-text:empty::before {
-  content: attr(placeholder);
-  color: #999;
-}
-    
+      position: absolute;
+      padding: 2px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+      min-height: 10px;
+      outline: none;
+      pointer-events: auto;
+      background-color: white;
+      overflow: hidden;
+    }
+    .editable-text:empty::before {
+      content: attr(placeholder);
+      color: #999;
+    }
     #generer {
-      margin: 20px auto; /* Centré */
-  padding: 15px 30px; /* Plus grand pour le tactile */
-  font-size: 16px; /* Texte plus lisible */
-  cursor: pointer;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  width: 80%; /* Largeur adaptée à l'écran */
-  max-width: 300px; /* Largeur maximale */
-  text-align: center;
-  display: block; /* Pour le centrage */
-}
+      margin: 10px auto;
+      padding: 15px 30px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      width: 80%;
+      max-width: 300px;
+      text-align: center;
+      display: block;
+    }
     /* Adaptation pour mobile */
-#mobile-wrapper {
-  width: 100%;
-  transform-origin: top center;
-  transition: transform 0.3s ease;
-}
-@media (max-width: 800px) {
-  #mobile-wrapper {
-    transform: scale(0.6);
-    width: 100%;
-    margin: 0;
-  }
-  #generer {
-    width: 90% !important;
-    margin: 10px auto !important;
-    padding: 12px !important;
-  }
-}
-    
-/* Adaptation pour mobile */
-window.addEventListener('load', function() {
-  if (window.innerWidth <= 800) {
-    document.getElementById('mobile-wrapper').style.transform = 'scale(0.6)';
-  }
-});
-
+    @media (max-width: 800px) {
+      #mobile-container {
+        transform: scale(0.5);
+        transform-origin: top center;
+        width: 1600px;
+        margin-left: -200px;
+      }
+      #generer {
+        width: 90% !important;
+        margin: 10px auto !important;
+      }
+    }
   </style>
-
-  
 </head>
 <body>
-  <div id="mobile-wrapper">
+  <div id="mobile-container">
     <h1>Ma licorne du genre</h1>
     <div id="container">
-    <img id="licorne-image" src="./La_licorne_du_genre.jpg" alt="La licorne du genre">
-    <!-- Curseurs et autres éléments (inchangés) -->
-    <!-- Curseur Identité de genre : femme -->
-    <div class="slider-track" id="slider-identity-fem" style="background: linear-gradient(to right, #4ECDC4, #44A08D); top: 146px; left: 352px; width: 213px; height: 8px;">
-      <div class="slider-diamond" id="slider-diamond-identity-fem"></div>
-    </div>
-    <!-- Curseur Identité de genre : homme -->
-    <div class="slider-track" id="slider-identity-hom" style="background: linear-gradient(to right, #4ECDC4, #44A08D); top: 164px; left: 352px; width: 213px; height: 8px;">
-      <div class="slider-diamond" id="slider-diamond-identity-hom"></div>
-    </div>
-    <!-- Curseur Identité de genre : autre -->
-    <div class="slider-track" id="slider-identity-aut" style="background: linear-gradient(to right, #4ECDC4, #44A08D); top: 183px; left: 352px; width: 213px; height: 8px;">
-      <div class="slider-diamond" id="slider-diamond-identity-aut"></div>
-    </div>
+      <img id="licorne-image" src="./La_licorne_du_genre.jpg" alt="La licorne du genre">
+      <!-- Curseurs et autres éléments -->
+      <!-- Curseur Identité de genre : femme -->
+      <div class="slider-track" id="slider-identity-fem" style="background: linear-gradient(to right, #4ECDC4, #44A08D); top: 146px; left: 352px; width: 213px; height: 8px;">
+        <div class="slider-diamond" id="slider-diamond-identity-fem"></div>
+      </div>
+      <!-- Curseur Identité de genre : homme -->
+      <div class="slider-track" id="slider-identity-hom" style="background: linear-gradient(to right, #4ECDC4, #44A08D); top: 164px; left: 352px; width: 213px; height: 8px;">
+        <div class="slider-diamond" id="slider-diamond-identity-hom"></div>
+      </div>
+      <!-- Curseur Identité de genre : autre -->
+      <div class="slider-track" id="slider-identity-aut" style="background: linear-gradient(to right, #4ECDC4, #44A08D); top: 183px; left: 352px; width: 213px; height: 8px;">
+        <div class="slider-diamond" id="slider-diamond-identity-aut"></div>
+      </div>
+      <!-- Curseur Expression de genre : femme -->
+      <div class="slider-track" id="slider-expression-fem" style="background: linear-gradient(to right, #9BDFBA, #7BC4A8); top: 244px; left: 352px; width: 213px; height: 8px;">
+        <div class="slider-diamond" id="slider-diamond-expression-fem"></div>
+      </div>
+      <!-- Curseur Expression de genre : homme -->
+      <div class="slider-track" id="slider-expression-hom" style="background: linear-gradient(to right, #9BDFBA, #7BC4A8); top: 262px; left: 352px; width: 213px; height: 8px;">
+        <div class="slider-diamond" id="slider-diamond-expression-hom"></div>
+      </div>
+      <!-- Curseur Expression de genre : autre -->
+      <div class="slider-track" id="slider-expression-aut" style="background: linear-gradient(to right, #9BDFBA, #7BC4A8); top: 280px; left: 352px; width: 213px; height: 8px;">
+        <div class="slider-diamond" id="slider-diamond-expression-aut"></div>
+      </div>
+      <!-- Curseur Attirance sexuelle : femme -->
+      <div class="slider-track" id="slider-attirance-fem" style="background: linear-gradient(to right, #FFB265, #A76F36); top: 435px; left: 352px; width: 213px; height: 8px;">
+        <div class="slider-diamond" id="slider-diamond-attirance-fem"></div>
+      </div>
+      <!-- Curseur Attirance sexuelle : homme -->
+      <div class="slider-track" id="slider-attirance-hom" style="background: linear-gradient(to right, #FFB265, #A76F36); top: 453px; left: 352px; width: 213px; height: 8px;">
+        <div class="slider-diamond" id="slider-diamond-attirance-hom"></div>
+      </div>
+      <!-- Curseur Attirance sexuelle : autre -->
+      <div class="slider-track" id="slider-attirance-aut" style="background: linear-gradient(to right, #FFB265, #A76F36); top: 472px; left: 352px; width: 213px; height: 8px;">
+        <div class="slider-diamond" id="slider-diamond-attirance-aut"></div>
+      </div>
+      <!-- Curseur Attirance romantique : femme -->
+      <div class="slider-track" id="slider-romance-fem" style="background: linear-gradient(to right, #BE414B, #86222A); top: 536px; left: 352px; width: 213px; height: 8px;">
+        <div class="slider-diamond" id="slider-diamond-romance-fem"></div>
+      </div>
+      <!-- Curseur Attirance romantique : homme -->
+      <div class="slider-track" id="slider-romance-hom" style="background: linear-gradient(to right, #BE414B, #86222A); top: 554px; left: 352px; width: 213px; height: 8px;">
+        <div class="slider-diamond" id="slider-diamond-romance-hom"></div>
+      </div>
+      <!-- Curseur Attirance romantique : autre -->
+      <div class="slider-track" id="slider-romance-aut" style="background: linear-gradient(to right, #BE414B, #86222A); top: 572px; left: 352px; width: 213px; height: 8px;">
+        <div class="slider-diamond" id="slider-diamond-romance-aut"></div>
+      </div>
+      <!-- Cases à cocher : Sexe assigné à la naissance -->
+      <div class="custom-checkbox-group" style="top: 360px; left: 350px;">
+        <div class="custom-checkbox" data-value="femme"></div>
+        <div class="custom-checkbox" data-value="homme"></div>
+        <div class="custom-checkbox" data-value="intersexue"></div>
+      </div>
 
-    <!-- Curseur Expression de genre : femme -->
-    <div class="slider-track" id="slider-expression-fem" style="background: linear-gradient(to right, #9BDFBA, #7BC4A8); top: 244px; left: 352px; width: 213px; height: 8px;">
-      <div class="slider-diamond" id="slider-diamond-expression-fem"></div>
+      <!-- Zones de texte -->
+      <!-- Prenom choisi -->
+      <div class="editable-text" contenteditable="true" style="top: 95px; left: 545px; width: 100px;" placeholder="Prénom choisi"></div>
+      <!-- Pronoms -->
+      <div class="editable-text" contenteditable="true" style="top: 115px; left: 545px; width: 100px;" placeholder="Pronoms"></div>
+      <!-- Nom de ton genre -->
+      <div class="editable-text" contenteditable="true" style="top: 115px; left: 650px; width: 100px;" placeholder="Nom de ton genre"></div>
+      <!-- Identitée sexuelle -->
+      <div class="editable-text" contenteditable="true" style="top: 404px; left: 555px; width: 100px;" placeholder="Identitée sexuelle"></div>
+      <!-- Identitée romantique -->
+      <div class="editable-text" contenteditable="true" style="top: 527px; left: 675px; width: 115px;" placeholder="Identitée romantique"></div>
     </div>
-    <!-- Curseur Expression de genre : homme -->
-    <div class="slider-track" id="slider-expression-hom" style="background: linear-gradient(to right, #9BDFBA, #7BC4A8); top: 262px; left: 352px; width: 213px; height: 8px;">
-      <div class="slider-diamond" id="slider-diamond-expression-hom"></div>
-    </div>
-    <!-- Curseur Expression de genre : autre -->
-    <div class="slider-track" id="slider-expression-aut" style="background: linear-gradient(to right, #9BDFBA, #7BC4A8); top: 280px; left: 352px; width: 213px; height: 8px;">
-      <div class="slider-diamond" id="slider-diamond-expression-aut"></div>
-    </div>
-
-    <!-- Curseur Attirance sexuelle : femme -->
-    <div class="slider-track" id="slider-attirance-fem" style="background: linear-gradient(to right, #FFB265, #A76F36); top: 435px; left: 352px; width: 213px; height: 8px;">
-      <div class="slider-diamond" id="slider-diamond-attirance-fem"></div>
-    </div>
-    <!-- Curseur Attirance sexuelle : homme -->
-    <div class="slider-track" id="slider-attirance-hom" style="background: linear-gradient(to right, #FFB265, #A76F36); top: 453px; left: 352px; width: 213px; height: 8px;">
-      <div class="slider-diamond" id="slider-diamond-attirance-hom"></div>
-    </div>
-    <!-- Curseur Attirance sexuelle : autre -->
-    <div class="slider-track" id="slider-attirance-aut" style="background: linear-gradient(to right, #FFB265, #A76F36); top: 472px; left: 352px; width: 213px; height: 8px;">
-      <div class="slider-diamond" id="slider-diamond-attirance-aut"></div>
-    </div>
-
-    <!-- Curseur Attirance romantique : femme -->
-    <div class="slider-track" id="slider-romance-fem" style="background: linear-gradient(to right, #BE414B, #86222A); top: 536px; left: 352px; width: 213px; height: 8px;">
-      <div class="slider-diamond" id="slider-diamond-romance-fem"></div>
-    </div>
-    <!-- Curseur Attirance romantique : homme -->
-    <div class="slider-track" id="slider-romance-hom" style="background: linear-gradient(to right, #BE414B, #86222A); top: 554px; left: 352px; width: 213px; height: 8px;">
-      <div class="slider-diamond" id="slider-diamond-romance-hom"></div>
-    </div>
-    <!-- Curseur Attirance romantique : autre -->
-    <div class="slider-track" id="slider-romance-aut" style="background: linear-gradient(to right, #BE414B, #86222A); top: 572px; left: 352px; width: 213px; height: 8px;">
-      <div class="slider-diamond" id="slider-diamond-romance-aut"></div>
-    </div>
-
-    <!-- Cases à cocher : Sexe assigné à la naissance -->
-<div class="custom-checkbox-group" style="top: 360px; left: 350px;">
-  <div class="custom-checkbox" data-value="femme"></div>
-  <div class="custom-checkbox" data-value="homme"></div>
-  <div class="custom-checkbox" data-value="intersexue"></div>
-</div>
-
-    
-  <!-- Zones de texte -->
-    <!-- Prenom choisi -->
-    <div class="editable-text" contenteditable="true" style="top: 95px; left: 545px; width: 100px;" placeholder="Prénom choisi"></div>
-    <!-- Pronoms -->
-    <div class="editable-text" contenteditable="true" style="top: 115px; left: 545px; width: 100px;" placeholder="Pronoms"></div>
-    <!-- Nom de ton genre -->
-    <div class="editable-text" contenteditable="true" style="top: 115px; left: 650px; width: 100px;" placeholder="Nom de ton genre"></div>
-    <!-- Identitée sexuelle -->
-    <div class="editable-text" contenteditable="true" style="top: 404px; left: 555px; width: 100px;" placeholder="Identitée sexuelle"></div>
-     <!-- Identitée romantique -->
-    <div class="editable-text" contenteditable="true" style="top: 527px; left: 675px; width: 115px;" placeholder="Identitée romantique"></div>
-  
   </div>
-  </div>
-  
- <!-- Bouton generer l'image -->
   <button id="generer">Générer ma licorne</button>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script>
-    
     // Désactive le zoom par molette sur la page
     document.addEventListener('wheel', function(e) {
       if (e.ctrlKey) {
-        e.preventDefault(); // Empêche le zoom par Ctrl+molette
+        e.preventDefault();
       }
     }, { passive: false });
 
     // Fonction pour rendre les losanges glissants (compatible mobile)
-function setupSlider(diamondId, trackId) {
-  const diamond = document.getElementById(diamondId);
-  const track = document.getElementById(trackId);
-  let isDragging = false;
+    function setupSlider(diamondId, trackId) {
+      const diamond = document.getElementById(diamondId);
+      const track = document.getElementById(trackId);
+      let isDragging = false;
 
-  // Événements pour ordinateur
-  diamond.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    e.preventDefault();
-  });
+      diamond.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        e.preventDefault();
+      });
 
-  // Événements pour mobile
-  diamond.addEventListener('touchstart', (e) => {
-    isDragging = true;
-    e.preventDefault();
-  });
+      diamond.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        e.preventDefault();
+      });
 
-  document.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    handleDrag(e.clientX);
-  });
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        handleDrag(e.clientX);
+      });
 
-  document.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-    handleDrag(e.touches[0].clientX);
-  });
+      document.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        handleDrag(e.touches[0].clientX);
+      });
 
-  function handleDrag(clientX) {
-    const rect = track.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-    diamond.style.left = percentage + '%';
-  }
+      function handleDrag(clientX) {
+        const rect = track.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+        diamond.style.left = percentage + '%';
+      }
 
-  document.addEventListener('mouseup', () => {
-    isDragging = false;
-  });
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
 
-  document.addEventListener('touchend', () => {
-    isDragging = false;
-  });
-}
+      document.addEventListener('touchend', () => {
+        isDragging = false;
+      });
+    }
 
     // Active les losanges glissants
     setupSlider('slider-diamond-identity-fem', 'slider-identity-fem');
@@ -293,104 +271,25 @@ function setupSlider(diamondId, trackId) {
     setupSlider('slider-diamond-romance-hom', 'slider-romance-hom');
     setupSlider('slider-diamond-romance-aut', 'slider-romance-aut');
 
-// Gestion des boutons radio personnalisés
-document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
-  checkbox.addEventListener('click', function() {
-    // Retire la classe "selected" de tous les boutons
-    document.querySelectorAll('.custom-checkbox').forEach(cb => {
-      cb.classList.remove('selected');
+    // Gestion des boutons radio personnalisés
+    document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('click', function() {
+        document.querySelectorAll('.custom-checkbox').forEach(cb => {
+          cb.classList.remove('selected');
+        });
+        this.classList.add('selected');
+      });
     });
-    // Ajoute la classe "selected" au bouton cliqué
-    this.classList.add('selected');
-  });
-});
-    
+
     // Génère l'image
-document.getElementById('generer').addEventListener('click', function() {
-  html2canvas(document.getElementById('container')).then(canvas => {
-    let link = document.createElement('a');
-    link.download = 'ma-licorne-du-genre.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  });
-});
+    document.getElementById('generer').addEventListener('click', function() {
+      html2canvas(document.getElementById('container')).then(canvas => {
+        let link = document.createElement('a');
+        link.download = 'ma-licorne-du-genre.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    });
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
