@@ -65,17 +65,18 @@
   display: flex;
   gap: 88px; /* Espace entre les boutons */
 }
+
 .custom-checkbox {
   width: 20px; /* Largeur du bouton */
   height: 20px; /* Hauteur du bouton */
   border-radius: 50%; /* Forme ronde */
-  border: 2px solid #333; /* Bordure noire */
+  background-color: transparent; /* Fond transparent */
   cursor: pointer; /* Curseur "main" au survol */
-  background-color: transparent; /* Fond transparent par défaut */
+  border: none; /* Pas de bordure */
 }
+
 .custom-checkbox.selected {
-  border: 2px solid #000; /* Bordure plus foncée quand sélectionné */
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3); /* Ombre pour le bouton sélectionné */
+  background-color: black; /* Fond noir quand sélectionné */
 }
     
     /* Style des zones de texte */
@@ -259,6 +260,7 @@ document.getElementById('generer').addEventListener('click', function() {
   </script>
 </body>
 </html>
+
 
 
 
