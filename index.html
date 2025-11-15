@@ -91,18 +91,20 @@
       background-color: black;
     }
     /* Style des zones de texte */
-    .editable-text {
-      position: absolute;
-      padding: 2px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      font-size: 12px;
-      min-height: 10px;
-      outline: none;
-      pointer-events: auto;
-      background-color: white;
-      overflow: hidden;
-    }
+  .editable-text {
+  position: absolute;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 12px;
+  min-height: 20px; /* Hauteur minimale augmentée */
+  line-height: 1.2;
+  outline: none;
+  pointer-events: auto;
+  background-color: white;
+  overflow: visible; /* Permet au texte de dépasser si nécessaire */
+  white-space: nowrap; /* Empêche le retour à la ligne */
+}
     .editable-text:empty::before {
       content: attr(placeholder);
       color: #999;
@@ -129,12 +131,12 @@
     margin-left: -200px;
   }
   #generer {
-    width: 90% !important;
-    margin: -20px auto 10px !important; /* Marge négative pour remonter le bouton */
-    padding: 12px !important;
-    position: relative;
-    z-index: 10;
-  }
+  width: 90% !important;
+  margin: 10px auto !important;
+  padding: 12px !important;
+  position: relative;
+  z-index: 10;
+}
 }
   </style>
 </head>
@@ -211,12 +213,14 @@
       <div class="editable-text" contenteditable="true" style="top: 527px; left: 675px; width: 115px;" placeholder="Identitée romantique"></div>
 
       
-    <!-- Bouton générer l'image (déplacé à l'intérieur de #container) -->
-      <div style="position: relative; width: 100%; margin-top: 20px;">
-        <button id="generer" style="margin: 20px auto 0; display: block;">Générer ma licorne</button>
+    </div> <!-- Fermeture de #container -->
+      <!-- Bouton générer l'image (en dehors de #container) -->
+      <div style="position: relative; width: 100%; margin-top: -20px;">
+        <button id="generer" style="margin: 10px auto; display: block;">Générer ma licorne</button>
       </div>
-  </div> <!-- Fermeture de #container -->
   </div> <!-- Fermeture de #mobile-container -->
+
+  
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script>
     // Désactive le zoom par molette sur la page
@@ -322,4 +326,5 @@ document.getElementById('generer').addEventListener('click', function(e) {
   </script>
 </body>
 </html>
+
 
