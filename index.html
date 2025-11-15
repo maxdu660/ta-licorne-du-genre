@@ -111,7 +111,25 @@
       border: none;
       border-radius: 5px;
     }
+
+    /* Masque les boutons non sélectionnés pendant la capture */
+@media print {
+  .checkbox-group input[type="radio"]:not(:checked) {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    border: none !important;
+  }
+}
+
+    /* Style pour masquer les boutons non sélectionnés pendant la capture */
+.hide-unchecked-radio .checkbox-group input[type="radio"]:not(:checked) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  border: none !important;
+}
   </style>
+
+  
 </head>
 <body>
   <h1>Ma licorne du genre</h1>
@@ -254,6 +272,7 @@
   </script>
 </body>
 </html>
+
 
 
 
