@@ -123,17 +123,19 @@
     }
     /* Adaptation pour mobile */
     @media (max-width: 800px) {
-      #mobile-container {
-        transform: scale(0.5);
-        width: 1600px;
-        margin-left: -200px;
-      }
-      #generer {
-        width: 90% !important;
-        margin: 10px auto !important;
-        padding: 12px !important;
-      }
-    }
+  #mobile-container {
+    transform: scale(0.5);
+    width: 1600px;
+    margin-left: -200px;
+  }
+  #generer {
+    width: 90% !important;
+    margin: -20px auto 10px !important; /* Marge négative pour remonter le bouton */
+    padding: 12px !important;
+    position: relative;
+    z-index: 10;
+  }
+}
   </style>
 </head>
 <body>
@@ -207,9 +209,14 @@
       <div class="editable-text" contenteditable="true" style="top: 404px; left: 555px; width: 100px;" placeholder="Identitée sexuelle"></div>
       <!-- Identitée romantique -->
       <div class="editable-text" contenteditable="true" style="top: 527px; left: 675px; width: 115px;" placeholder="Identitée romantique"></div>
-    </div>
-  </div>
-  <button id="generer">Générer ma licorne</button>
+
+      
+    <!-- Bouton générer l'image (déplacé à l'intérieur de #container) -->
+      <div style="position: relative; width: 100%; margin-top: 20px;">
+        <button id="generer" style="margin: 20px auto 0; display: block;">Générer ma licorne</button>
+      </div>
+  </div> <!-- Fermeture de #container -->
+  </div> <!-- Fermeture de #mobile-container -->
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script>
     // Désactive le zoom par molette sur la page
@@ -298,14 +305,21 @@
     });
 
     // Génère l'image
-    document.getElementById('generer').addEventListener('click', function() {
-      html2canvas(document.getElementById('container')).then(canvas => {
-        let link = document.createElement('a');
-        link.download = 'ma-licorne-du-genre.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      });
-    });
+document.getElementById('generer').addEventListener('click', function(e) {
+  e.preventDefault(); // Empêche les comportements indésirables sur mobile
+  html2canvas(document.getElementById('container'), {
+    scale: 2, // Augmente la résolution pour mobile
+    logging: false,
+    useCORS: true,
+    allowTaint: true
+  }).then(canvas => {
+    let link = document.createElement('a');
+    link.download = 'ma-licorne-du-genre.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+});
   </script>
 </body>
 </html>
+
