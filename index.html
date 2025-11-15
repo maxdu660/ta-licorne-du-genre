@@ -75,13 +75,13 @@
       appearance: none;
       width: 20px;
       height: 20px;
-      border: 2px solid #333;
+      border: 2px solid #000000;
       border-radius: 50%;
       outline: none;
       cursor: pointer;
     }
     .checkbox-group input[type="radio"]:checked {
-      background-color: #333;
+      background-color: #FFFFFF;
     }
     /* Style des zones de texte */
     .editable-text {
@@ -112,21 +112,6 @@
       border-radius: 5px;
     }
 
-    /* Masque les boutons non sélectionnés pendant la capture */
-@media print {
-  .checkbox-group input[type="radio"]:not(:checked) {
-    opacity: 0 !important;
-    visibility: hidden !important;
-    border: none !important;
-  }
-}
-
-    /* Style pour masquer les boutons non sélectionnés pendant la capture */
-.hide-unchecked-radio .checkbox-group input[type="radio"]:not(:checked) {
-  opacity: 0 !important;
-  visibility: hidden !important;
-  border: none !important;
-}
   </style>
 
   
@@ -272,6 +257,7 @@ document.getElementById('generer').addEventListener('click', function() {
   </script>
 </body>
 </html>
+
 
 
 
