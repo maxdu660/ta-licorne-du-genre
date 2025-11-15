@@ -93,17 +93,21 @@
     /* Style des zones de texte */
   .editable-text {
   position: absolute;
-  padding: 1px;
+  padding: 2px;
   border: 1px solid #ccc;
   border-radius: 3px;
-  font-size: 10px;
-  min-height: 10px; /* Augmentation discrète de la hauteur minimale */
+  font-size: 12px;
+  min-height: 16px;
+  min-width: 100px;
   outline: none;
   pointer-events: auto;
   background-color: white;
   overflow: hidden;
-  line-height: 14px; /* Meilleure répartition du texte */
+  line-height: 12px;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
+
 
     .editable-text:empty::before {
       content: attr(placeholder);
@@ -213,13 +217,14 @@
       <div class="editable-text" contenteditable="true" style="top: 527px; left: 675px; width: 115px;" placeholder="Identitée romantique"></div>
 
       
-    </div> <!-- Fermeture de #container -->
+</div> <!-- Fermeture de #container -->
   </div> <!-- Fermeture de #mobile-container -->
-  <!-- Bouton en dehors de tout conteneur capturé -->
-  <div style="position: relative; width: 100%; max-width: 800px; margin: 10px auto 0;">
-    <button id="generer" style="margin: 0 auto; display: block; width: 80%; max-width: 300px; padding: 15px 30px;">Générer ma licorne</button>
+  <!-- Bouton générer -->
+  <div style="width: 100%; text-align: center; margin-top: -10px; margin-bottom: 20px;">
+    <button id="generer" style="width: 80%; max-width: 300px; padding: 15px 30px; margin: 0 auto; display: block;">
+      Générer ma licorne
+    </button>
   </div>
-
   
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script>
@@ -314,16 +319,19 @@ document.getElementById('generer').addEventListener('click', function(e) {
   // Masque temporairement le bouton pendant la capture
   this.style.visibility = 'hidden';
   html2canvas(document.getElementById('container'), {
-    scale: 2,
-    logging: false,
-    useCORS: true,
-    allowTaint: true,
-    backgroundColor: null // Conserve la transparence si besoin
+   scale: 2,
+  logging: false,
+  useCORS: true,
+  allowTaint: true,
+  letterRendering: true,
+  foreignObjectRendering: true,
+  backgroundColor: null // Conserve la transparence si besoin
   }).then(canvas => {
     let link = document.createElement('a');
     link.download = 'ma-licorne-du-genre.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
+    
     // Réaffiche le bouton après la capture
     this.style.visibility = 'visible';
   });
@@ -331,6 +339,7 @@ document.getElementById('generer').addEventListener('click', function(e) {
   </script>
 </body>
 </html>
+
 
 
 
