@@ -178,11 +178,12 @@
     <input type="text" class="text-input" placeholder="Prénom choisi" style="top: 112px; left: 555px; width: 100px;">
     <input type="text" class="text-input" placeholder="Pronoms" style="top: 288px; left: 1370px; width: 100px;">
   </div>
-
+  
+ <!-- Bouton generer l'image -->
   <button id="generer">Générer ma licorne</button>
-
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script>
+    
     // Désactive le zoom par molette sur la page
     document.addEventListener('wheel', function(e) {
       if (e.ctrlKey) {
@@ -230,16 +231,32 @@
 
     // Génère l'image
     document.getElementById('generer').addEventListener('click', function() {
-      html2canvas(document.getElementById('container')).then(canvas => {
-        let link = document.createElement('a');
-        link.download = 'ma-licorne-du-genre.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      });
-    });
+  // 1. Définir une hauteur fixe pour capturer tout le contenu
+  const zoomContainer = document.getElementById('zoom-container');
+  const originalHeight = zoomContainer.style.height;
+  zoomContainer.style.height = '2000px'; // Ajuste cette valeur si nécessaire
+
+  // 2. Générer l'image
+  html2canvas(zoomContainer, {
+    scale: 1, // Échelle de rendu
+    logging: false,
+    useCORS: true,
+    allowTaint: true
+  }).then(canvas => {
+    // 3. Réinitialiser la hauteur
+    zoomContainer.style.height = originalHeight;
+
+    // 4. Télécharger l'image
+    let link = document.createElement('a');
+    link.download = 'ma-licorne-du-genre.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+});
   </script>
 </body>
 </html>
+
 
 
 
