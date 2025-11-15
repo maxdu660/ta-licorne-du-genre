@@ -117,18 +117,28 @@
       display: block;
     }
     /* Adaptation pour mobile */
-    @media (max-width: 800px) {
-      #mobile-container {
-        transform: scale(0.5);
-        transform-origin: top center;
-        width: 1600px;
-        margin-left: -200px;
-      }
-      #generer {
-        width: 90% !important;
-        margin: 10px auto !important;
-      }
-    }
+#mobile-container {
+  width: 100%;
+  transform-origin: top center;
+  transition: transform 0.3s ease;
+  touch-action: pinch-zoom; /* Autorise le zoom avec deux doigts */
+}
+@media (max-width: 800px) {
+  #mobile-container {
+    transform: scale(0.5);
+    width: 1600px;
+    margin-left: -200px;
+  }
+  #generer {
+    width: 90% !important;
+    margin: 10px auto !important;
+    padding: 12px !important;
+  }
+  .slider-track, .slider-diamond {
+    touch-action: pan-x; /* Autorise uniquement le déplacement horizontal */
+  }
+}
+    
     /* Empêche le défilement sur mobile quand on touche les curseurs */
 @media (max-width: 800px) {
   body {
@@ -230,19 +240,25 @@ function setupSlider(diamondId, trackId) {
   const diamond = document.getElementById(diamondId);
   const track = document.getElementById(trackId);
   let isDragging = false;
+  let startX, startY;
+
+  diamond.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    e.preventDefault();
+  });
 
   diamond.addEventListener('touchstart', (e) => {
-    e.preventDefault();
     isDragging = true;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    e.preventDefault();
   });
 
   track.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-  });
-
-  diamond.addEventListener('mousedown', (e) => {
-    e.preventDefault();
     isDragging = true;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    e.preventDefault();
   });
 
   document.addEventListener('mousemove', (e) => {
@@ -252,8 +268,11 @@ function setupSlider(diamondId, trackId) {
 
   document.addEventListener('touchmove', (e) => {
     if (!isDragging) return;
-    e.preventDefault();
-    handleDrag(e.touches[0].clientX);
+    // Empêche le défilement vertical si le mouvement est horizontal
+    if (Math.abs(e.touches[0].clientX - startX) > Math.abs(e.touches[0].clientY - startY)) {
+      e.preventDefault();
+      handleDrag(e.touches[0].clientX);
+    }
   }, { passive: false });
 
   function handleDrag(clientX) {
@@ -318,4 +337,5 @@ document.addEventListener('touchmove', function(e) {
   </script>
 </body>
 </html>
+
 
