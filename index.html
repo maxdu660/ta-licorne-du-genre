@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Ma licorne du genre</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <style>
     /* Désactive la sélection de texte */
     body, html {
@@ -28,6 +28,7 @@
       flex-direction: column;
       background-color: #f9f9f9;
       min-height: 100vh;
+      touch-action: auto; /* Autorise tous les gestes tactiles */
     }
     #mobile-container {
       width: 100%;
@@ -35,6 +36,7 @@
       margin: 0 auto;
       overflow: hidden;
       position: relative;
+      touch-action: pinch-zoom; /* Autorise le zoom avec deux doigts */
     }
     #container {
       position: relative;
@@ -47,6 +49,7 @@
       width: 100%;
       height: auto;
       display: block;
+      touch-action: auto; /* Autorise les gestes sur l'image */
     }
     /* Style des curseurs */
     .slider-track {
@@ -55,6 +58,7 @@
       position: absolute;
       cursor: pointer;
       pointer-events: auto;
+      touch-action: pan-x; /* Autorise uniquement le déplacement horizontal */
     }
     .slider-diamond {
       width: 8px;
@@ -67,6 +71,7 @@
       left: 50%;
       cursor: pointer;
       pointer-events: auto;
+      touch-action: pan-x; /* Autorise uniquement le déplacement horizontal */
     }
     /* Style des cases à cocher */
     .custom-checkbox-group {
@@ -117,38 +122,18 @@
       display: block;
     }
     /* Adaptation pour mobile */
-#mobile-container {
-  width: 100%;
-  transform-origin: top center;
-  transition: transform 0.3s ease;
-  touch-action: pinch-zoom; /* Autorise le zoom avec deux doigts */
-}
-@media (max-width: 800px) {
-  #mobile-container {
-    transform: scale(0.5);
-    width: 1600px;
-    margin-left: -200px;
-  }
-  #generer {
-    width: 90% !important;
-    margin: 10px auto !important;
-    padding: 12px !important;
-  }
-  .slider-track, .slider-diamond {
-    touch-action: pan-x; /* Autorise uniquement le déplacement horizontal */
-  }
-}
-    
-    /* Empêche le défilement sur mobile quand on touche les curseurs */
-@media (max-width: 800px) {
-  body {
-    overscroll-behavior: none;
-    touch-action: none;
-  }
-  .slider-track, .slider-diamond {
-    touch-action: pan-x;
-  }
-}
+    @media (max-width: 800px) {
+      #mobile-container {
+        transform: scale(0.5);
+        width: 1600px;
+        margin-left: -200px;
+      }
+      #generer {
+        width: 90% !important;
+        margin: 10px auto !important;
+        padding: 12px !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -211,7 +196,6 @@
         <div class="custom-checkbox" data-value="homme"></div>
         <div class="custom-checkbox" data-value="intersexue"></div>
       </div>
-
       <!-- Zones de texte -->
       <!-- Prenom choisi -->
       <div class="editable-text" contenteditable="true" style="top: 95px; left: 545px; width: 100px;" placeholder="Prénom choisi"></div>
@@ -235,61 +219,59 @@
       }
     }, { passive: false });
 
-   // Fonction pour rendre les losanges glissants (compatible mobile)
-function setupSlider(diamondId, trackId) {
-  const diamond = document.getElementById(diamondId);
-  const track = document.getElementById(trackId);
-  let isDragging = false;
-  let startX, startY;
+    // Fonction pour rendre les losanges glissants (compatible mobile)
+    function setupSlider(diamondId, trackId) {
+      const diamond = document.getElementById(diamondId);
+      const track = document.getElementById(trackId);
+      let isDragging = false;
+      let startX, startY;
 
-  diamond.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    e.preventDefault();
-  });
+      diamond.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        e.preventDefault();
+      });
 
-  diamond.addEventListener('touchstart', (e) => {
-    isDragging = true;
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    e.preventDefault();
-  });
+      diamond.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      });
 
-  track.addEventListener('touchstart', (e) => {
-    isDragging = true;
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    e.preventDefault();
-  });
+      track.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      });
 
-  document.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    handleDrag(e.clientX);
-  });
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        handleDrag(e.clientX);
+      });
 
-  document.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-    // Empêche le défilement vertical si le mouvement est horizontal
-    if (Math.abs(e.touches[0].clientX - startX) > Math.abs(e.touches[0].clientY - startY)) {
-      e.preventDefault();
-      handleDrag(e.touches[0].clientX);
+      document.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        // Empêche uniquement le défilement vertical si le mouvement est horizontal
+        if (Math.abs(e.touches[0].clientX - startX) > Math.abs(e.touches[0].clientY - startY)) {
+          e.preventDefault();
+          handleDrag(e.touches[0].clientX);
+        }
+      }, { passive: false });
+
+      function handleDrag(clientX) {
+        const rect = track.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+        diamond.style.left = percentage + '%';
+      }
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+
+      document.addEventListener('touchend', () => {
+        isDragging = false;
+      });
     }
-  }, { passive: false });
-
-  function handleDrag(clientX) {
-    const rect = track.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-    diamond.style.left = percentage + '%';
-  }
-
-  document.addEventListener('mouseup', () => {
-    isDragging = false;
-  });
-
-  document.addEventListener('touchend', () => {
-    isDragging = false;
-  });
-}
 
     // Active les losanges glissants
     setupSlider('slider-diamond-identity-fem', 'slider-identity-fem');
@@ -324,18 +306,6 @@ function setupSlider(diamondId, trackId) {
         link.click();
       });
     });
-
-    // Empêche le défilement quand on touche les curseurs
-document.addEventListener('touchmove', function(e) {
-  if (e.target.closest('.slider-track, .slider-diamond')) {
-    return;
-  }
-  if (document.querySelector('.slider-diamond[style*="left"]')) {
-    e.preventDefault();
-  }
-}, { passive: false });
   </script>
 </body>
 </html>
-
-
