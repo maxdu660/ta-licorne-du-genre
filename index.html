@@ -240,22 +240,7 @@
 
     // Génère l'image
     document.getElementById('generer').addEventListener('click', function() {
-  // 1. Définir une hauteur fixe pour capturer tout le contenu
-  const zoomContainer = document.getElementById('zoom-container');
-  const originalHeight = zoomContainer.style.height;
-  zoomContainer.style.height = '2000px'; // Ajuste cette valeur si nécessaire
-
-  // 2. Générer l'image
-  html2canvas(zoomContainer, {
-    scale: 1, // Échelle de rendu
-    logging: false,
-    useCORS: true,
-    allowTaint: true
-  }).then(canvas => {
-    // 3. Réinitialiser la hauteur
-    zoomContainer.style.height = originalHeight;
-
-    // 4. Télécharger l'image
+  html2canvas(document.getElementById('container')).then(canvas => {
     let link = document.createElement('a');
     link.download = 'ma-licorne-du-genre.png';
     link.href = canvas.toDataURL('image/png');
@@ -265,6 +250,7 @@
   </script>
 </body>
 </html>
+
 
 
 
