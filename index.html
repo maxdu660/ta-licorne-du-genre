@@ -261,29 +261,12 @@
     setupSlider('slider-diamond-romance-aut', 'slider-romance-aut');
 
     // Génère l'image
-   document.getElementById('generer').addEventListener('click', function() {
-  // 1. Ajoute une classe pour masquer les boutons non sélectionnés
-  document.body.classList.add('hide-unchecked-radio');
-
-  // 2. Génère l'image
-  html2canvas(document.getElementById('zoom-container'), {
-    scale: 2,
-    logging: false,
-    useCORS: true,
-    allowTaint: true,
-    height: 3000,
-    windowHeight: 3000
-  }).then(canvas => {
-    // 3. Télécharge l'image
+document.getElementById('generer').addEventListener('click', function() {
+  html2canvas(document.getElementById('container')).then(canvas => {
     let link = document.createElement('a');
     link.download = 'ma-licorne-du-genre.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
-
-    // 4. Retire la classe après la capture
-    setTimeout(() => {
-      document.body.classList.remove('hide-unchecked-radio');
-    }, 100); // Petit délai pour s'assurer que la classe est bien retirée
   });
 });
   </script>
