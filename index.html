@@ -112,14 +112,43 @@
   text-align: center;
   display: block; /* Pour le centrage */
 }
+    /* Adaptation pour mobile */
+#mobile-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+@media (max-width: 800px) {
+  #container {
+    transform: scale(0.9);
+    transform-origin: top center;
+    width: 110%;
+    margin-left: -5%;
+  }
+  #generer {
+    width: 90% !important;
+    max-width: 350px;
+  }
+}
+    
+/* Ajustement automatique pour mobile */
+window.addEventListener('load', function() {
+  if (window.innerWidth <= 800) {
+    document.getElementById('container').style.transform = 'scale(0.9)';
+    document.getElementById('container').style.transformOrigin = 'top center';
+  }
+});
 
   </style>
 
   
 </head>
 <body>
-  <h1>Ma licorne du genre</h1>
-  <div id="container">
+  <div id="mobile-wrapper">
+    <h1>Ma licorne du genre</h1>
+    <div id="container">
     <img id="licorne-image" src="./La_licorne_du_genre.jpg" alt="La licorne du genre">
     <!-- Curseurs et autres éléments (inchangés) -->
     <!-- Curseur Identité de genre : femme -->
@@ -193,7 +222,8 @@
     <div class="editable-text" contenteditable="true" style="top: 404px; left: 555px; width: 100px;" placeholder="Identitée sexuelle"></div>
      <!-- Identitée romantique -->
     <div class="editable-text" contenteditable="true" style="top: 527px; left: 675px; width: 115px;" placeholder="Identitée romantique"></div>
-    
+  
+  </div>
   </div>
   
  <!-- Bouton generer l'image -->
@@ -290,6 +320,7 @@ document.getElementById('generer').addEventListener('click', function() {
   </script>
 </body>
 </html>
+
 
 
 
