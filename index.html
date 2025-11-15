@@ -58,7 +58,6 @@
       position: absolute;
       cursor: pointer;
       pointer-events: auto;
-      touch-action: pan-x; /* Autorise uniquement le déplacement horizontal */
     }
     .slider-diamond {
       width: 8px;
@@ -71,7 +70,6 @@
       left: 50%;
       cursor: pointer;
       pointer-events: auto;
-      touch-action: pan-x; /* Autorise uniquement le déplacement horizontal */
     }
     /* Style des cases à cocher */
     .custom-checkbox-group {
@@ -141,6 +139,11 @@
   position: relative;
   z-index: 10;
 }
+}
+/* Correction pour les boutons radio sur mobile */
+.custom-checkbox {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
     
@@ -250,7 +253,6 @@ function setupSlider(diamondId, trackId) {
     isDragging = true;
     startX = e.clientX;
     e.preventDefault();
-    e.stopPropagation();
   });
 
   // Pour mobile
@@ -258,18 +260,18 @@ function setupSlider(diamondId, trackId) {
     isDragging = true;
     startX = e.touches[0].clientX;
     e.preventDefault();
-    e.stopPropagation();
   });
 
+  // Déplacement avec souris
   document.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
     handleDrag(e.clientX);
   });
 
+  // Déplacement avec tactile
   document.addEventListener('touchmove', (e) => {
     if (!isDragging) return;
     e.preventDefault();
-    e.stopPropagation();
     handleDrag(e.touches[0].clientX);
   }, { passive: false });
 
@@ -280,13 +282,9 @@ function setupSlider(diamondId, trackId) {
     diamond.style.left = percentage + '%';
   }
 
-  document.addEventListener('mouseup', () => {
-    isDragging = false;
-  });
-
-  document.addEventListener('touchend', () => {
-    isDragging = false;
-  });
+  // Fin du drag
+  document.addEventListener('mouseup', () => { isDragging = false; });
+  document.addEventListener('touchend', () => { isDragging = false; });
 }
 
     // Active les losanges glissants
@@ -315,8 +313,9 @@ document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
   });
 
   // Pour tactile mobile
-  checkbox.addEventListener('touchend', function(e) {
+  checkbox.addEventListener('touchstart', function(e) {
     e.preventDefault();
+    e.stopPropagation();
     document.querySelectorAll('.custom-checkbox').forEach(cb => {
       cb.classList.remove('selected');
     });
@@ -324,7 +323,7 @@ document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
   });
 });
 
-    // Génère l'image
+   // Génère l'image
 document.getElementById('generer').addEventListener('click', function(e) {
   e.preventDefault();
   this.style.visibility = 'hidden';
@@ -356,10 +355,10 @@ document.getElementById('generer').addEventListener('click', function(e) {
     alert('Erreur lors de la génération');
   });
 });
-});
   </script>
 </body>
 </html>
+
 
 
 
