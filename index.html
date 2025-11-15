@@ -129,6 +129,16 @@
         margin: 10px auto !important;
       }
     }
+    /* Empêche le défilement sur mobile quand on touche les curseurs */
+@media (max-width: 800px) {
+  body {
+    overscroll-behavior: none;
+    touch-action: none;
+  }
+  .slider-track, .slider-diamond {
+    touch-action: pan-x;
+  }
+}
   </style>
 </head>
 <body>
@@ -215,47 +225,52 @@
       }
     }, { passive: false });
 
-    // Fonction pour rendre les losanges glissants (compatible mobile)
-    function setupSlider(diamondId, trackId) {
-      const diamond = document.getElementById(diamondId);
-      const track = document.getElementById(trackId);
-      let isDragging = false;
+   // Fonction pour rendre les losanges glissants (compatible mobile)
+function setupSlider(diamondId, trackId) {
+  const diamond = document.getElementById(diamondId);
+  const track = document.getElementById(trackId);
+  let isDragging = false;
 
-      diamond.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        e.preventDefault();
-      });
+  diamond.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    isDragging = true;
+  });
 
-      diamond.addEventListener('touchstart', (e) => {
-        isDragging = true;
-        e.preventDefault();
-      });
+  track.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+  });
 
-      document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        handleDrag(e.clientX);
-      });
+  diamond.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    isDragging = true;
+  });
 
-      document.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        handleDrag(e.touches[0].clientX);
-      });
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    handleDrag(e.clientX);
+  });
 
-      function handleDrag(clientX) {
-        const rect = track.getBoundingClientRect();
-        const x = clientX - rect.left;
-        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-        diamond.style.left = percentage + '%';
-      }
+  document.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    handleDrag(e.touches[0].clientX);
+  }, { passive: false });
 
-      document.addEventListener('mouseup', () => {
-        isDragging = false;
-      });
+  function handleDrag(clientX) {
+    const rect = track.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    diamond.style.left = percentage + '%';
+  }
 
-      document.addEventListener('touchend', () => {
-        isDragging = false;
-      });
-    }
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  document.addEventListener('touchend', () => {
+    isDragging = false;
+  });
+}
 
     // Active les losanges glissants
     setupSlider('slider-diamond-identity-fem', 'slider-identity-fem');
@@ -290,6 +305,17 @@
         link.click();
       });
     });
+
+    // Empêche le défilement quand on touche les curseurs
+document.addEventListener('touchmove', function(e) {
+  if (e.target.closest('.slider-track, .slider-diamond')) {
+    return;
+  }
+  if (document.querySelector('.slider-diamond[style*="left"]')) {
+    e.preventDefault();
+  }
+}, { passive: false });
   </script>
 </body>
 </html>
+
